@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Cơm trưa online</title>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+  >
+
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body id="top-section">
+
+  <!-- Header -->
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+    <div class="container">
+
+      <a class="navbar-brand fw-bold text-success" href="/">
+        🍱 Cơm Trưa Online
+      </a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarContent"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+
+          <li class="nav-item">
+  <a class="nav-link active nav-home" href="/#top-section">
+    Trang chủ
+  </a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link nav-menu" href="#menu-section">
+    Thực đơn
+  </a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link nav-contact" href="#contact-section">
+    Liên hệ
+  </a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link" href="/pages/policy.html">
+    Chính sách hỗ trợ
+  </a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link" href="/pages/profile.html">
+    Hồ sơ
+  </a>
+</li>
+
+<li class="nav-item">
+<a
+class="nav-link"
+href="/pages/my-orders.html">
+Đơn hàng của tôi
+</a>
+</li>
+
+
+  <li class="nav-item ms-lg-3">
+  <span id="auth-area"></span>
+</li>
+
+
+<li
+  id="admin-link"
+  class="nav-item ms-lg-2"
+  style="display:none"
+>
+  <a
+    href="/pages/admin-orders.html"
+    class="btn btn-warning"
+  >
+    📦 Quản lý đơn
+  </a>
+</li>
+
+<li class="nav-item ms-lg-3">
+  <a href="/pages/cart.html" class="btn btn-success">
+    <i class="bi bi-cart"></i>
+    Giỏ hàng (<span id="cart-count">0</span>)
+  </a>
+</li>
+
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Banner -->
+
+<section class="hero-section">
+
+  <div
+    id="heroCarousel"
+    class="carousel slide"
+    data-bs-ride="carousel"
+    data-bs-interval="2500"
+  >
+
+    <div class="carousel-inner">
+
+      <div class="carousel-item active">
+        <img
+          src="./images/banner/banner-1.jpg"
+          class="d-block w-100 hero-image"
+          alt="Banner 1"
+        >
+      </div>
+
+      <div class="carousel-item">
+        <img
+          src="./images/banner/banner-2.jpg"
+          class="d-block w-100 hero-image"
+          alt="Banner 2"
+        >
+      </div>
+
+      <div class="carousel-item">
+        <img
+          src="./images/banner/banner-3.jpg"
+          class="d-block w-100 hero-image"
+          alt="Banner 3"
+        >
+      </div>
+
+    </div>
+
+    <div class="hero-overlay">
+
+      <div class="container text-center">
+
+        <h1 class="display-4 fw-bold mb-3">
+          Cơm văn phòng giao tận nơi
+        </h1>
+
+        <p class="lead">
+          Nhanh chóng - Tiện lợi - Đầy đủ dinh dưỡng
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section id="menu-section" class="container my-5">
+
+  <h2 class="text-center mb-4">
+    Thực đơn tuần này
+  </h2>
+  <div
+  id="admin-actions"
+  class="text-center mb-4"
+></div>
+
+  <!-- TÌM KIẾM + LỌC -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-md-5">
+      <input
+        type="text"
+        id="search-input"
+        class="form-control"
+        placeholder="Tìm món ăn..."
+      >
+    </div>
+
+    <div class="col-md-3">
+      <select id="category-filter" class="form-select">
+        <option value="">Tất cả danh mục</option>
+        <option value="Món chính">Món chính</option>
+        <option value="Nước">Nước</option>
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <select id="sort-select" class="form-select">
+        <option value="">Sắp xếp</option>
+        <option value="price-asc">Giá tăng dần</option>
+        <option value="price-desc">Giá giảm dần</option>
+      </select>
+    </div>
+
+  </div>
+
+  <!-- HÔM NAY -->
+  <div id="today-label" class="text-center mb-3"></div>
+
+  <!-- CHỌN THỨ -->
+  <div
+    id="weekday-tabs"
+    class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+  </div>
+
+  <!-- DANH SÁCH MÓN -->
+  <div id="weekly-menu-list" class="row"></div>
+  
+  <!-- KHU VỰC ADMIN -->
+<div id="admin-order-section" class="mt-5"></div>
+
+</section>
+
+  <!-- Google Maps -->
+
+  <section class="container mb-5">
+
+    <h2 class="text-center mb-4">
+      Địa chỉ cửa hàng
+    </h2>
+
+    <div class="ratio ratio-16x9">
+
+      <iframe
+        src="https://www.google.com/maps?q=B%C3%ACnh%20Th%E1%BA%A1nh%2C%20H%E1%BB%93%20Ch%C3%AD%20Minh&output=embed"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+
+  <footer id="contact-section" class="bg-dark text-white py-4">
+
+    <div class="container text-center">
+
+      <h5>Cơm Trưa Online</h5>
+
+      <p>Hotline: 0123 456 789</p>
+
+      <p>Email: support@comtruaonline.vn</p>
+
+      <small>© 2026 - Website bán cơm trưa trực tuyến</small>
+
+    </div>
+
+  </footer>
+
+  <!-- MODAL THÔNG BÁO -->
+<div class="modal fade" id="cartModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4">
+
+      <h5 class="mb-3">Thêm vào giỏ thành công!</h5>
+
+      <p>Sản phẩm đã được thêm vào giỏ hàng của bạn.</p>
+
+      <button class="btn btn-success" data-bs-dismiss="modal">
+        Tiếp tục mua hàng
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="./js/cart-common.js"></script>
+<script src="./js/main.js"></script>
+<script src="./js/auth.js"></script>
+
+<script>
+  window.addEventListener("storage", updateCartCount);
+  window.addEventListener("focus", updateCartCount);
+
+  document.querySelector(".nav-home").addEventListener("click", function (e) {
+    if (
+      window.location.pathname === "/" ||
+      window.location.pathname.endsWith("index.html")
+    ) {
+      e.preventDefault();
+
+      document.getElementById("top-section").scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+  });
+</script>
+
+
+<!-- Modal thêm món -->
+<div class="modal fade" id="addMenuModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">
+          Thêm món vào thực đơn
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="mb-3">
+          <label class="form-label">
+            Tìm món
+          </label>
+
+          <input
+            type="text"
+            class="form-control"
+            id="searchProduct"
+            placeholder="Nhập tên món...">
+        </div>
+
+        <div class="mb-3">
+
+          <label class="form-label">
+            Chọn món
+          </label>
+
+          <select
+            id="productSelect"
+            class="form-select"
+            size="10">
+          </select>
+
+        </div>
+
+        <div class="mb-3">
+
+          <label class="form-label">
+            Chọn ngày
+          </label>
+
+          <select
+            id="daySelect"
+            class="form-select">
+
+            <option value="1">Thứ 2</option>
+            <option value="2">Thứ 3</option>
+            <option value="3">Thứ 4</option>
+            <option value="4">Thứ 5</option>
+            <option value="5">Thứ 6</option>
+            <option value="6">Thứ 7</option>
+            <option value="7">Chủ nhật</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Hủy
+        </button>
+
+        <button
+          class="btn btn-success"
+          onclick="submitAddMenu()">
+
+          Thêm
+
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script src="./js/weekly-menu.js"></script>
+
+</body>
+</html>
+

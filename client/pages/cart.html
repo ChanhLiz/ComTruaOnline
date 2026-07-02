@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Giỏ hàng</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container py-5">
+
+  <a href="/" class="btn btn-outline-secondary mb-3">
+    ← Quay lại trang chủ
+  </a>
+
+  <h2 class="mb-4">🛒 Giỏ hàng</h2>
+
+  <div id="cart-list"></div>
+
+  <h4 class="text-end mt-4">
+    Tổng tiền: <span id="cart-total">0</span>đ
+  </h4>
+
+  <div class="text-end mt-3">
+  <a
+    href="/pages/checkout.html"
+    class="btn btn-success"
+  >
+    Đi tới Thanh toán
+  </a>
+  </div>
+  
+</div>
+
+
+
+<script src="../js/cart-common.js"></script>
+<script src="../js/cart.js"></script>
+
+</body>
+</html>

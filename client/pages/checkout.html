@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+
+
+<body class="checkout-page">
+
+<div class="checkout-container">
+
+  <a
+  href="/pages/cart.html"
+  class="btn btn-light checkout-back-btn mb-4">
+  ← Quay lại giỏ hàng
+  </a>
+
+  <h2 class="checkout-title">
+    Thanh toán đơn hàng
+  </h2>
+
+<div class="checkout-card">
+
+  <h5 class="checkout-section-title">
+    👤 Thông tin khách hàng
+  </h5>
+
+  <div class="info-grid">
+
+    <div class="label">Họ tên</div>
+    <div><input id="full_name" class="form-control" disabled></div>
+
+    <div class="label">Email</div>
+    <div><input id="email" class="form-control" disabled></div>
+
+    <div class="label">Số điện thoại</div>
+    <div><input id="phone" class="form-control" disabled></div>
+
+    <div class="label">Địa chỉ</div>
+    <div><textarea id="address" class="form-control" disabled></textarea></div>
+
+  </div>
+
+</div>
+
+
+
+<div class="checkout-card">
+
+  <h5 class="checkout-section-title">
+    🛵 Giao hàng
+  </h5>
+
+  <div class="info-grid">
+
+    <div class="label">
+      Khung giờ giao
+    </div>
+
+    <div>
+      <select id="delivery_time" class="form-select">
+
+        <option value="10:30-11:30">
+          10:30 - 11:30
+        </option>
+
+        <option value="11:30-12:30">
+          11:30 - 12:30
+        </option>
+
+        <option value="12:30-13:30">
+          12:30 - 13:30
+        </option>
+
+      </select>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+  <div class="card checkout-card mb-4">
+
+    <h5 class="checkout-section-title">
+      🛒 Giỏ hàng
+    </h5>
+
+    <div id="checkout-cart"></div>
+
+  </div>
+
+<div class="checkout-card mb-4">
+
+  <h5 class="checkout-section-title">
+    💳 Phương thức thanh toán
+  </h5>
+
+  <div class="payment-grid">
+
+    <div class="payment-item" data-method="cod">
+      <img src="/images/logo/cod.png">
+      <span>COD</span>
+    </div>
+
+    <div class="payment-item" data-method="bank_transfer">
+      <img src="/images/logo/vietcombank.jpg">
+      <span>Bank</span>
+    </div>
+
+    <div class="payment-item" data-method="momo">
+      <img src="/images/logo/momo.png">
+      <span>MoMo</span>
+    </div>
+
+    <div class="payment-item" data-method="zalopay">
+      <img src="/images/logo/zalopay.png">
+      <span>ZaloPay</span>
+    </div>
+
+    <div class="payment-item" data-method="payment_gateway">
+      <img src="/images/logo/vnpay.png">
+      <span>VNPay</span>
+    </div>
+
+  </div>
+
+</div>
+
+<div>
+<input type="hidden" id="payment_method">
+
+
+  <button
+    class="btn btn-success btn-lg w-100 checkout-btn"
+    onclick="placeOrder()"
+  >
+    Thanh toán
+  </button>
+  
+</div>
+
+
+<div class="modal fade" id="bankModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 id="paymentTitle" class="modal-title">Thanh toán</h5>
+      </div>
+
+      <div class="modal-body text-center">
+
+        <!-- trạng thái ban đầu -->
+        <div id="paymentLoading">
+           <p style="font-weight:600;"></p>
+        </div>
+
+        <!-- nội dung thanh toán (ẨN BAN ĐẦU) -->
+        <div id="paymentContent" style="display:none;">
+
+        <!-- LOGO -->
+        <img id="paymentLogo" style="width:120px;margin-bottom:10px;"/>
+
+        <!-- COUNTDOWN -->
+        <div style="font-size:18px;font-weight:700;margin-bottom:10px;">
+            Thời gian còn lại:
+          <span id="countdown">15:00</span>
+        </div>
+
+        <!-- QR -->
+        <img
+          id="qrImage"
+          style="width:300px;height:300px;margin:10px auto;display:block;"/>
+
+        <hr>
+
+        <p>
+          Nội dung thanh toán:
+          <b id="transferContent"></b>
+        </p>
+
+      </div>
+
+      </div>
+      
+      <div class="modal-footer flex-column gap-2">
+
+        <button class="btn btn-danger w-100" onclick="cancelPayment()">
+          Dừng thanh toán
+        </button>
+
+        <button class="btn btn-success px-4" onclick="confirmPayment()">
+          Xác nhận thanh toán
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/checkout.js"></script>
+</body>
