@@ -1,6 +1,6 @@
 1. Import database
 
-database/ecommerce_db.sql
+ecommerce_db.sql
 
 2. Tạo file .env
 
