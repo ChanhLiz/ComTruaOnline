@@ -63,23 +63,64 @@ function renderCart() {
     subtotal +=
       item.price * item.quantity;
 
+    let optionHtml = "";
+
+    const opt = item.options || {};
+
+    if(opt.extraRice){
+        optionHtml += "🍚 Cơm thêm (+5.000đ)<br>";
+    }
+
+    if(opt.extraNoodle){
+        optionHtml += "🍜 Bún thêm (+5.000đ)<br>";
+    }
+
+    if(opt.extraMi){
+        optionHtml += "🍜 Mì thêm (+5.000đ)<br>";
+    }
+
+    if(opt.extraIce){
+        optionHtml += "🧊 Thêm đá<br>";
+    }
+
+    if(opt.spicyLevel){
+        optionHtml += `🌶 ${opt.spicyLevel}<br>`;
+    }
+
+    if(opt.note){
+        optionHtml += `📝 ${opt.note}<br>`;
+    }
+
     return `
-      <div class="checkout-item">
+    <div class="checkout-item">
 
-        <div class="checkout-item-info">
-          ${item.name}
-          -
-          ${item.quantity}
-          x
-          ${Number(item.price).toLocaleString("vi-VN")}đ
-        </div>
+    <div class="checkout-item-info">
 
-        <img
-          src="${item.thumbnail}"
-          class="checkout-item-img"
-        >
+        <b>${item.name}</b><br>
 
-      </div>
+        ${optionHtml}
+
+        ${
+            item.note
+            ?
+            `<br>📝 ${item.note}`
+            :
+            ""
+        }
+
+        <br>
+
+        ${item.quantity} x
+        ${Number(item.price).toLocaleString("vi-VN")}đ
+
+    </div>
+
+    <img
+    src="${item.thumbnail}"
+    class="checkout-item-img"
+    >
+
+    </div>
     `;
 
   }).join("");
@@ -154,6 +195,18 @@ if (!cart.length) {
   const address = document.getElementById("address").value;
   const payment_method = selectedPayment;
 
+const deliveryDateOption =
+document.getElementById("delivery_date").value;
+
+const today = new Date();
+
+if (deliveryDateOption === "tomorrow") {
+  today.setDate(today.getDate() + 1);
+}
+
+const delivery_date =
+today.toISOString().split("T")[0];
+
 const delivery_time =
 document.getElementById("delivery_time").value;
 
@@ -191,11 +244,13 @@ const shipping_fee = subtotal >= 150000 ? 0 : 15000;
     delivery_address: address,
     payment_method,
     shipping_fee,
+    delivery_date,
     delivery_time,
     items: cart.map(i => ({
       product_id: i.id,
       quantity: i.quantity,
-      price: i.price
+      price: i.price,
+      options: i.options || {}
     }))
   };
 
@@ -410,6 +465,8 @@ function cancelPayment(){
   modal.hide();
   pendingOrderData = null;
 }
+
+
 
 
 loadUser();

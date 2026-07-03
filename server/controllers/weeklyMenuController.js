@@ -11,15 +11,14 @@ exports.getWeeklyMenu = async (req, res) => {
         wm.day_of_week,
 
         p.id,
+        p.category_id,
         p.name,
         p.description,
-
         p.old_price,
         p.new_price,
         p.discount_percent,
         p.stock,
         p.thumbnail,
-
         c.name AS category_name
 
       FROM weekly_menus wm

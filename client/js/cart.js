@@ -47,29 +47,114 @@ function renderCart() {
     const row = document.createElement("div");
     row.className = "row border p-2 mb-2";
 
+    const options = item.options || {};
+
+let optionHtml = "";
+
+if(options.extraRice){
+
+    optionHtml += `
+    <small class="text-muted d-block">
+        🍚 Cơm thêm
+    </small>
+    `;
+
+}
+
+if(options.extraNoodle){
+
+    optionHtml += `
+    <small class="text-muted d-block">
+        🍜 Bún thêm
+    </small>
+    `;
+
+}
+
+if(options.extraMi){
+
+    optionHtml += `
+    <small class="text-muted d-block">
+        🍜 Mì thêm
+    </small>
+    `;
+
+}
+
+if(options.extraIce){
+
+    optionHtml += `
+    <small class="text-muted d-block">
+         Thêm đá
+    </small>
+    `;
+
+}
+
+if(options.spicyLevel){
+
+    optionHtml += `
+    <small class="text-muted d-block">
+        🌶 ${options.spicyLevel}
+    </small>
+    `;
+
+}
+
+
+if(options.note){
+
+    optionHtml += `
+    <small class="text-muted d-block">
+        📝 ${options.note}
+    </small>
+    `;
+
+}
+
     row.innerHTML = `
-      <div class="col-md-2">
-        <img src="${item.thumbnail}" class="img-fluid">
-      </div>
+<div class="col-md-2">
+    <img src="${item.thumbnail}" class="img-fluid">
+</div>
 
-      <div class="col-md-4">
-        <h5>${item.name}</h5>
-        <p>${Number(item.price).toLocaleString("vi-VN")}đ</p>
-      </div>
+<div class="col-md-4">
 
-      <div class="col-md-3">
+    <h5>${item.name}</h5>
+
+    <p>
+    ${Number(item.price).toLocaleString("vi-VN")}đ
+    ${
+    item.price !== item.basePrice
+    ?
+    `<br>
+    <small class="text-success">
+    (+5.000đ suất thêm)
+    </small>`
+    :
+    ""
+    }
+    </p>
+    ${optionHtml}
+
+</div>
+
+    <div class="col-md-3">
         <button class="btn btn-sm btn-outline-secondary btn-minus">-</button>
+
         <span>${item.quantity}</span>
+
         <button class="btn btn-sm btn-outline-secondary btn-plus">+</button>
-      </div>
+    </div>
 
-      <div class="col-md-2">
+    <div class="col-md-2">
         <b>${(item.price * item.quantity).toLocaleString("vi-VN")}đ</b>
-      </div>
+    </div>
 
-      <div class="col-md-1">
-        <button class="btn btn-danger btn-sm btn-delete">X</button>
-      </div>
+    <div class="col-md-1">
+        <button class="btn btn-danger btn-sm btn-delete">
+            X
+        </button>
+    </div>
     `;
 
     row.querySelector(".btn-minus").onclick = () => {

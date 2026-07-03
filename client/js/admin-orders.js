@@ -45,7 +45,6 @@ async function loadOrders() {
     orders.map(order => `
 
       <tr>
-
         <td>${order.id}</td>
 
         <td>
@@ -84,7 +83,6 @@ async function loadOrders() {
         </td>
 
         <td>
-
           <button
             class="btn btn-primary btn-sm"
             onclick="
@@ -95,11 +93,9 @@ async function loadOrders() {
           >
             Xem
           </button>
-
         </td>
 
         <td>
-
         <select
         class="form-select form-select-sm"
         onchange="updateStatus(${order.id},this.value)"
@@ -146,11 +142,8 @@ async function loadOrders() {
         >
         Đã hủy
         </option>
-
         </select>
-
         </td>
-
       </tr>
 
     `).join("");
@@ -170,79 +163,61 @@ async function viewDetail(id) {
 let html = `
 
 <h5>
-
 Thông tin đơn hàng
-
 </h5>
 
 <table class="table table-bordered">
-
 <tr>
-
 <th>Người nhận</th>
-
 <td>
-
 ${order.receiver_name}
-
 </td>
-
 </tr>
 
-<tr>
 
+<tr>
 <th>SĐT</th>
-
 <td>
-
 ${order.receiver_phone}
-
 </td>
-
 </tr>
 
-<tr>
 
+<tr>
 <th>Địa chỉ</th>
-
 <td>
-
 ${order.delivery_address}
-
 </td>
-
 </tr>
 
-<tr>
 
+<tr>
 <th>Thanh toán</th>
-
 <td>
-
 ${order.payment_method}
-
 </td>
-
 </tr>
 
-<tr>
 
+<tr>
 <th>Khung giờ</th>
-
 <td>
-
 ${order.delivery_time}
-
 </td>
-
 </tr>
 
+
 <tr>
-
-<th>Phí ship</th>
-
+<th>Ngày giao</th>
 <td>
+${order.delivery_date || ""}
+</td>
+</tr>
 
+
+<tr>
+<th>Phí ship</th>
+<td>
 ${
 Number(order.shipping_fee)===0
 ?
@@ -250,115 +225,82 @@ Number(order.shipping_fee)===0
 :
 Number(order.shipping_fee).toLocaleString("vi-VN")+"đ"
 }
-
 </td>
-
 </tr>
+
 
 <tr>
-
 <th>Trạng thái</th>
-
 <td>
-
 ${renderStatus(order.status)}
-
 </td>
-
 </tr>
-
 </table>
 
+
 <hr>
-
 <h5>
-
 Danh sách món
-
 </h5>
 
 `;
-
 items.forEach(item=>{
-
 html += `
-
 <div class="order-item">
-
 <div class="order-left">
-
 <img src="${item.thumbnail}">
-
 <div>
 
 <div class="order-name">
-
 ${item.name}
-
 </div>
 
 <div>
-
-SL:
-
-${item.quantity}
-
+SL: ${item.quantity}
 </div>
 
+${
+item.options
+?
+renderOptions(item.options)
+:
+""
+}
+</div>
 </div>
 
-</div>
 
 <div>
-
 ${Number(item.price*item.quantity)
-
 .toLocaleString("vi-VN")}đ
-
 </div>
-
 </div>
-
 `;
-
 });
 
+
 html += `
-
 <div class="order-total">
-
 Tổng thanh toán:
-
 ${Number(order.total_amount)
-
 .toLocaleString("vi-VN")}đ
-
 </div>
-
 `;
 
 document.getElementById(
-
 "order-detail-content"
-
 ).innerHTML = html;
 
 bootstrap.Modal
-
 .getOrCreateInstance(
 
 document.getElementById(
-
 "orderDetailModal"
-
 )
-
 ).show();
-
 }
 
 async function updateStatus(id,status){
-
 await fetch(
 `/api/orders/${id}/status`,
 {
@@ -367,7 +309,6 @@ method:"PUT",
 headers:{
 "Content-Type":"application/json"
 },
-
 body:JSON.stringify({
 status
 })
@@ -375,6 +316,85 @@ status
 );
 
 await loadOrders();
+}
+
+
+function renderOptions(options){
+
+    if(typeof options === "string"){
+
+        try{
+            options = JSON.parse(options);
+        }catch(e){
+            options = {};
+        }
+
+    }
+
+    let html = "";
+
+    if(options.extraRice){
+
+        html += `
+        <div class="text-success small">
+            ✔ Cơm thêm (+5.000đ)
+        </div>
+        `;
+
+    }
+
+    if(options.extraNoodle){
+
+        html += `
+        <div class="text-success small">
+            ✔ Bún thêm (+5.000đ)
+        </div>
+        `;
+
+    }
+
+    if(options.extraMi){
+
+        html += `
+        <div class="text-success small">
+            ✔ Mì thêm (+5.000đ)
+        </div>
+        `;
+
+    }
+
+    if(options.extraIce){
+
+        html += `
+        <div class="text-success small">
+            ✔ Thêm đá
+        </div>
+        `;
+
+    }
+
+    if(options.spicyLevel){
+
+        html += `
+        <div class="small">
+            🌶 ${options.spicyLevel}
+        </div>
+        `;
+
+    }
+
+
+    if(options.note){
+
+        html += `
+        <div class="small">
+            📝 ${options.note}
+        </div>
+        `;
+
+    }
+
+    return html;
 
 }
 

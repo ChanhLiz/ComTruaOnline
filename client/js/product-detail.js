@@ -109,11 +109,9 @@ async function loadProduct() {
 
   document
     .getElementById("addToCartBtn")
-    .addEventListener(
-      "click",
-      () => addToCart(product)
-    );
-
+    .addEventListener("click", function(){
+    window.addToCart(product);
+    });
 }
 
       loadReviewStats(id);
@@ -123,46 +121,6 @@ async function loadProduct() {
   } catch (err) {
     console.error(err);
     container.innerHTML = "<h4>Lỗi tải sản phẩm</h4>";
-  }
-}
-
-function getUser() {
-  return JSON.parse(localStorage.getItem("user"));
-}
-
-function addToCart(product) {
-
-  const user = getUser();
-
-  // CHƯA LOGIN
-  if (!user) {
-    showLoginPopup();
-    return;
-  }
-
-  const cart = getCart();
-
-  const existing = cart.find(i => i.id === product.id);
-
-  if (existing) {
-    existing.quantity++;
-  } else {
-    cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.new_price,
-      thumbnail: product.thumbnail,
-      quantity: 1
-    });
-  }
-
-  saveCart(cart);
-  updateCartCount();
-
-  const modalEl = document.getElementById("cartModal");
-  if (modalEl) {
-    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-    modal.show();
   }
 }
 

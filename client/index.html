@@ -240,7 +240,7 @@ href="/pages/my-orders.html">
     <div class="ratio ratio-16x9">
 
       <iframe
-        src="https://www.google.com/maps?q=B%C3%ACnh%20Th%E1%BA%A1nh%2C%20H%E1%BB%93%20Ch%C3%AD%20Minh&output=embed"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d361.6872139128189!2d106.71615933081347!3d10.793305442958946!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175295f94314c93%3A0xa9aedce8ac33fdd7!2zMTEzLzQ3IMSQLiBWb8yDIER1eSBOaW5oLCBUaOG6oW5oIE3hu7kgVMOieSwgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e1!3m2!1svi!2s!4v1783072362710!5m2!1svi!2s" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin">
         allowfullscreen
         loading="lazy">
       </iframe>
@@ -279,6 +279,231 @@ href="/pages/my-orders.html">
       <button class="btn btn-success" data-bs-dismiss="modal">
         Tiếp tục mua hàng
       </button>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal chọn tùy chọn món -->
+<div class="modal fade" id="optionModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Tùy chọn món ăn
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+    <h6 id="optionProductName" class="fw-bold mb-3"></h6>
+
+    <!-- ================= CƠM ================= -->
+    <div id="riceOptionGroup" class="mb-4">
+
+        <label class="form-label fw-bold">
+            🍚 Cơm
+        </label>
+
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="radio"
+                name="extraRice"
+                id="riceNormal"
+                checked>
+
+            <label class="form-check-label">
+                Bình thường
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="radio"
+                name="extraRice"
+                id="riceExtra">
+
+            <label class="form-check-label">
+                Cơm thêm (+5.000đ)
+            </label>
+        </div>
+
+    </div>
+
+
+    <!-- ================= BÚN ================= -->
+    <div id="noodleOptionGroup" class="mb-4 d-none">
+
+        <label class="form-label fw-bold">
+            🍜 Bún
+        </label>
+
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="radio"
+                name="extraNoodle"
+                id="noodleNormal"
+                checked>
+
+            <label class="form-check-label">
+                Bình thường
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="radio"
+                name="extraNoodle"
+                id="noodleExtra">
+
+            <label class="form-check-label">
+                Thêm bún (+5.000đ)
+            </label>
+        </div>
+
+    </div>
+
+
+    <!-- ================= MÌ ================= -->
+    <div id="noodleTypeGroup" class="mb-4 d-none">
+
+        <label class="form-label fw-bold">
+            🍜 Mì
+        </label>
+
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="radio"
+                name="extraMi"
+                id="miNormal"
+                checked>
+
+            <label class="form-check-label">
+                Bình thường
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="radio"
+                name="extraMi"
+                id="miExtra">
+
+            <label class="form-check-label">
+                Thêm mì (+5.000đ)
+            </label>
+        </div>
+
+    </div>
+
+
+    <!-- ================= NƯỚC ================= -->
+    <div id="drinkOptionGroup" class="mb-4 d-none">
+
+        <label class="form-label fw-bold">
+            🥤 Đồ uống
+        </label>
+
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="radio"
+                name="extraIce"
+                id="iceNormal"
+                checked>
+
+            <label class="form-check-label">
+                Đá bình thường
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="radio"
+                name="extraIce"
+                id="iceExtra">
+
+            <label class="form-check-label">
+                Thêm đá
+            </label>
+        </div>
+
+    </div>
+
+
+    <!-- ================= ĐỘ CAY ================= -->
+    <div id="spicyGroup" class="mb-4">
+
+        <label class="form-label fw-bold">
+            🌶 Độ cay
+        </label>
+
+        <select
+            id="spicyLevel"
+            class="form-select">
+
+            <option>Không cay</option>
+            <option selected>Ít cay</option>
+            <option>Cay</option>
+
+        </select>
+
+    </div>
+
+
+    
+
+
+    <!-- ================= GHI CHÚ ================= -->
+    <div id="noteGroup">
+
+        <label class="form-label fw-bold">
+            📝 Ghi chú
+        </label>
+
+        <textarea
+            id="foodNote"
+            class="form-control"
+            rows="3"
+            placeholder="Nhập ghi chú..."></textarea>
+
+    </div>
+
+</div>
+
+      <div class="modal-footer">
+        <button
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+
+          Hủy
+
+        </button>
+
+        <button
+          class="btn btn-success"
+          id="confirmOptionBtn">
+
+          Thêm vào giỏ
+
+        </button>
+
+      </div>
 
     </div>
   </div>
@@ -400,6 +625,31 @@ href="/pages/my-orders.html">
   </div>
 </div>
 
+
+<!-- Floating Contact -->
+<div class="floating-contact">
+
+  <a href="javascript:void(0)" class="floating-item zalo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo">
+    <span class="floating-label">Zalo</span>
+  </a>
+
+  <a href="javascript:void(0)" class="floating-item facebook">
+    <i class="bi bi-facebook"></i>
+    <span class="floating-label">Facebook</span>
+  </a>
+
+  <a href="javascript:void(0)" class="floating-item tiktok">
+    <i class="bi bi-tiktok"></i>
+    <span class="floating-label">TikTok</span>
+  </a>
+
+  <a href="javascript:void(0)" class="floating-item support">
+    <i class="bi bi-headset"></i>
+    <span class="floating-label">Chăm sóc khách hàng</span>
+  </a>
+
+</div>
 
 <script src="./js/weekly-menu.js"></script>
 

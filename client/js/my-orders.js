@@ -70,10 +70,26 @@ ${new Date(order.created_at)
 
 <p>
 
-Khung giờ giao:
+Ngày giao:
 <b>
 
-${order.delivery_time || "Chưa chọn"}
+${
+order.delivery_date
+?
+new Date(order.delivery_date).toLocaleDateString("vi-VN")
+:
+""
+}
+
+</b>
+
+<br>
+
+Khung giờ:
+
+<b>
+
+${order.delivery_time}
 
 </b>
 
@@ -128,12 +144,24 @@ ${renderStatus(order.status)}
 </p>
 
 <button
-class="btn btn-primary"
+class="btn btn-primary me-2"
 onclick="viewDetail(${order.id})">
-
 Xem chi tiết
-
 </button>
+
+${
+order.status === "pending"
+?
+`
+<button
+class="btn btn-danger"
+onclick="cancelOrder(${order.id})">
+Hủy đơn
+</button>
+`
+:
+""
+}
 
 </div>
 
@@ -216,76 +244,63 @@ Thông tin giao hàng
 
 </h5>
 
+
 <table class="table table-bordered">
-
 <tr>
-
 <th>Người nhận</th>
-
 <td>${order.receiver_name}</td>
-
 </tr>
-
 <tr>
-
 <th>SĐT</th>
-
 <td>${order.receiver_phone}</td>
-
 </tr>
 
-<tr>
-
-<th>Địa chỉ</th>
-
-<td>${order.delivery_address}</td>
-
-</tr>
 
 <tr>
-
-<th>Khung giờ</th>
-
-<td>${order.delivery_time}</td>
-
-</tr>
-
-<tr>
-
-<th>Phí ship</th>
-
+<th>
+Ngày giao
+</th>
 <td>
+${new Date(order.delivery_date)
+.toLocaleDateString("vi-VN")}
+</td>
+</tr>
 
+
+<tr>
+<th>Địa chỉ</th>
+<td>${order.delivery_address}</td>
+</tr>
+<tr>
+<th>Khung giờ</th>
+<td>${order.delivery_time}</td>
+</tr>
+
+
+<tr>
+<th>Phí ship</th>
+<td>
 ${
 Number(order.shipping_fee) === 0
 ? "0đ (Miễn phí đơn từ 150k)"
 : Number(order.shipping_fee).toLocaleString("vi-VN") + "đ"
 }
-
 </td>
-
 </tr>
 
-<tr>
 
+<tr>
 <th>Thanh toán</th>
-
 <td>${order.payment_method}</td>
-
 </tr>
+
 
 <tr>
-
 <th>Trạng thái</th>
-
 <td>
-
 ${renderStatus(order.status)}
-
 </td>
-
 </tr>
-
 </table>
 
 <h5>
@@ -337,6 +352,7 @@ SL:
 ${item.quantity}
 
 </div>
+${renderOptions(item.options)}
 
 </div>
 
@@ -382,6 +398,126 @@ document.getElementById(
 )
 )
 .show();
+
+}
+
+
+async function cancelOrder(id){
+
+const ok = confirm(
+"Bạn chắc chắn muốn hủy đơn hàng này?"
+);
+
+if(!ok) return;
+
+const token =
+localStorage.getItem("token");
+
+const res =
+await fetch(
+"/api/orders/my/" + id + "/cancel",
+{
+method:"PUT",
+headers:{
+Authorization:
+"Bearer " + token
+}
+}
+);
+
+const data =
+await res.json();
+
+if(!res.ok){
+
+alert(data.message);
+
+return;
+
+}
+
+alert("Hủy đơn thành công");
+
+loadOrders();
+
+}
+
+function renderOptions(options){
+
+    if(typeof options === "string"){
+
+        try{
+            options = JSON.parse(options);
+        }catch(e){
+            options = {};
+        }
+
+    }
+
+    let html = "";
+
+    if(options.extraRice){
+
+        html += `
+        <div class="text-success small">
+            ✔ Cơm thêm (+5.000đ)
+        </div>
+        `;
+
+    }
+
+    if(options.extraNoodle){
+
+        html += `
+        <div class="text-success small">
+            ✔ Bún thêm (+5.000đ)
+        </div>
+        `;
+
+    }
+
+    if(options.extraMi){
+
+        html += `
+        <div class="text-success small">
+            ✔ Mì thêm (+5.000đ)
+        </div>
+        `;
+
+    }
+
+    if(options.extraIce){
+
+        html += `
+        <div class="text-success small">
+            ✔ Thêm đá
+        </div>
+        `;
+
+    }
+
+    if(options.spicyLevel){
+
+        html += `
+        <div class="small">
+            🌶 ${options.spicyLevel}
+        </div>
+        `;
+
+    }
+
+
+    if(options.note){
+
+        html += `
+        <div class="small">
+            📝 ${options.note}
+        </div>
+        `;
+
+    }
+
+    return html;
 
 }
 

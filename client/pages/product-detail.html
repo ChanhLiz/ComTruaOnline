@@ -164,27 +164,296 @@
 
   </div>
 
-  <!-- MODAL THÔNG BÁO -->
+<!-- Modal chọn tùy chọn món -->
+<div class="modal fade" id="optionModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Tùy chọn món ăn
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <h6 id="optionProductName"
+                    class="fw-bold mb-3"></h6>
+
+
+                <!-- ================= CƠM ================= -->
+
+                <div id="riceOptionGroup" class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        🍚 Cơm
+                    </label>
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="extraRice"
+                            id="riceNormal"
+                            checked>
+
+                        <label class="form-check-label">
+                            Bình thường
+                        </label>
+
+                    </div>
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="extraRice"
+                            id="riceExtra">
+
+                        <label class="form-check-label">
+                            Cơm thêm (+5.000đ)
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= BÚN ================= -->
+
+                <div id="noodleOptionGroup"
+                     class="mb-4 d-none">
+
+                    <label class="form-label fw-bold">
+                        🍜 Bún
+                    </label>
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="extraNoodle"
+                            id="noodleNormal"
+                            checked>
+
+                        <label class="form-check-label">
+                            Bình thường
+                        </label>
+
+                    </div>
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="extraNoodle"
+                            id="noodleExtra">
+
+                        <label class="form-check-label">
+                            Thêm bún (+5.000đ)
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= MÌ ================= -->
+
+                <div id="noodleTypeGroup"
+                     class="mb-4 d-none">
+
+                    <label class="form-label fw-bold">
+                        🍜 Mì
+                    </label>
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="extraMi"
+                            id="miNormal"
+                            checked>
+
+                        <label class="form-check-label">
+                            Bình thường
+                        </label>
+
+                    </div>
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="extraMi"
+                            id="miExtra">
+
+                        <label class="form-check-label">
+                            Thêm mì (+5.000đ)
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= NƯỚC ================= -->
+
+                <div id="drinkOptionGroup"
+                     class="mb-4 d-none">
+
+                    <label class="form-label fw-bold">
+                        🥤 Đồ uống
+                    </label>
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="extraIce"
+                            id="iceNormal"
+                            checked>
+
+                        <label class="form-check-label">
+                            Đá bình thường
+                        </label>
+
+                    </div>
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="extraIce"
+                            id="iceExtra">
+
+                        <label class="form-check-label">
+                            Thêm đá
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Độ cay -->
+
+                <div id="spicyGroup" class="mb-4">
+
+                    <label class="form-label fw-bold">
+                        🌶 Độ cay
+                    </label>
+
+                    <select
+                        id="spicyLevel"
+                        class="form-select">
+
+                        <option>Không cay</option>
+                        <option selected>Ít cay</option>
+                        <option>Cay</option>
+
+                    </select>
+
+                </div>
+
+
+                
+
+
+                <!-- Ghi chú -->
+
+                <div>
+
+                    <label class="form-label fw-bold">
+                        📝 Ghi chú
+                    </label>
+
+                    <textarea
+                        id="foodNote"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Nhập ghi chú..."></textarea>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Hủy
+
+                </button>
+
+                <button
+                    class="btn btn-success"
+                    id="confirmOptionBtn">
+
+                    Thêm vào giỏ
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Modal thông báo thêm thành công -->
 <div class="modal fade" id="cartModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
+
     <div class="modal-content text-center p-4">
 
-      <h5 class="mb-3">Thêm vào giỏ thành công!</h5>
+      <h5 class="mb-3">
+        Thêm vào giỏ thành công!
+      </h5>
 
-      <p>Sản phẩm đã được thêm vào giỏ hàng của bạn.</p>
+      <p>
+        Sản phẩm đã được thêm vào giỏ hàng của bạn.
+      </p>
 
-      <button class="btn btn-success" data-bs-dismiss="modal">
+      <button
+        class="btn btn-success"
+        data-bs-dismiss="modal">
         Tiếp tục mua hàng
       </button>
 
     </div>
+
   </div>
 </div>
+
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="../js/cart-common.js"></script>
+<script src="../js/main.js"></script>
 <script src="../js/product-detail.js"></script>
 <script src="../js/auth.js"></script>
 

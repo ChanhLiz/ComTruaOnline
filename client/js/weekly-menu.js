@@ -43,6 +43,12 @@ function getCurrentDay() {
 const today = getCurrentDay();
 
 let selectedDay = today;
+
+function getTomorrowDay(day){
+    return day === 7 ? 1 : day + 1;
+}
+const tomorrow = getTomorrowDay(today);
+
 let allMenus = [];
 
 async function loadWeeklyMenu() {
@@ -69,15 +75,34 @@ async function loadWeeklyMenu() {
 }
 
 function renderTodayLabel() {
-  const text = today === 7
-    ? "Chủ nhật"
-    : `Thứ ${today + 1}`;
 
-  todayLabel.innerHTML = `
-    <span class="badge bg-success fs-6 px-3 py-2">
-      Hôm nay là ${text}
-    </span>
-  `;
+    const now = new Date();
+
+    const weekdays = [
+        "Chủ nhật",
+        "Thứ 2",
+        "Thứ 3",
+        "Thứ 4",
+        "Thứ 5",
+        "Thứ 6",
+        "Thứ 7"
+    ];
+
+    const weekday = weekdays[now.getDay()];
+
+    const date =
+        String(now.getDate()).padStart(2, "0");
+
+    const month =
+        String(now.getMonth() + 1).padStart(2, "0");
+
+    const year = now.getFullYear();
+
+    todayLabel.innerHTML = `
+        <span class="badge bg-success fs-6 px-3 py-2">
+            Hôm nay là ${weekday} (${date}/${month}/${year})
+        </span>
+    `;
 }
 
 function renderTabs() {
@@ -139,9 +164,7 @@ function renderMenu(day) {
 
     html += `
       <div class="col-md-4 mb-4">
-
         <div class="card shadow-sm product-card h-100">
-
           <img
             src="${product.thumbnail}"
             class="card-img-top"
@@ -167,7 +190,6 @@ function renderMenu(day) {
                 `
                 : ""
             }
-
             <div>
 
   ${
@@ -197,7 +219,6 @@ function renderMenu(day) {
   }
 </small>
 </h5>
-
 </div>
 
             <div class="d-grid gap-2 mt-3">
@@ -230,7 +251,7 @@ function renderMenu(day) {
               </a>
 
 ${
-  selectedDay !== today
+  (selectedDay !== today)
   ? `
     <button class="btn btn-secondary" disabled>
       CHƯA BÁN
@@ -241,11 +262,12 @@ ${
       <button
         class="btn btn-outline-primary"
         onclick="addToCart({
-          id:${product.id},
-          name:'${product.name.replace(/'/g,"\\'")}',
-          new_price:${product.new_price},
-          thumbnail:'${product.thumbnail}'
-        })"
+        id:${product.id},
+        name:'${product.name.replace(/'/g,"\\'")}',
+        new_price:${product.new_price},
+        thumbnail:'${product.thumbnail}',
+        category_id:${product.category_id}
+      })"
       >
         Thêm vào giỏ hàng
       </button>
@@ -256,13 +278,9 @@ ${
       </button>
     `
 }
-
             </div>
-
           </div>
-
         </div>
-
       </div>
     `;
   });
@@ -361,9 +379,7 @@ async function editPrice(productId) {
 
   const data =
     await res.json();
-
   alert(data.message);
-
   loadWeeklyMenu();
 }
 async function deleteMenu(id) {
@@ -382,9 +398,7 @@ async function deleteMenu(id) {
   );
 
   const data = await res.json();
-
   alert(data.message);
-
   loadWeeklyMenu();
 }
 
@@ -394,11 +408,8 @@ let allProducts = [];
 async function showAddMenuForm(){
 
     const res = await fetch("/api/products");
-
     allProducts = await res.json();
-
     renderProductList(allProducts);
-
     document.getElementById("searchProduct").value="";
 
     const modal =

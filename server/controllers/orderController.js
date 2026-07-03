@@ -1,9 +1,7 @@
 const db = require("../config/db");
 
 exports.getAllOrders = async (req, res) => {
-
   try {
-
     const [rows] = await db.query(`
       SELECT
         o.id,
@@ -13,28 +11,22 @@ exports.getAllOrders = async (req, res) => {
         o.delivery_address,
         o.payment_method,
         o.shipping_fee,
+        o.delivery_date,
         o.delivery_time,
+        o.customer_note,
         o.total_amount,
         o.status,
         o.created_at
-
       FROM orders o
-
       ORDER BY o.created_at DESC
     `);
-
     res.json(rows);
-
   } catch (err) {
-
     console.error(err);
-
     res.status(500).json({
       message: "Lỗi máy chủ"
     });
-
   }
-
 };
 
 
@@ -53,7 +45,9 @@ exports.getMyOrders = async (req, res) => {
         delivery_address,
         payment_method,
         shipping_fee,
+        delivery_date,
         delivery_time,
+        customer_note,
         total_amount,
         status,
         created_at
@@ -100,7 +94,9 @@ exports.getMyOrderDetail = async (req, res) => {
         delivery_address,
         payment_method,
         shipping_fee,
+        delivery_date,
         delivery_time,
+        customer_note,
         total_amount,
         status,
         created_at
@@ -120,18 +116,14 @@ exports.getMyOrderDetail = async (req, res) => {
         od.product_id,
         od.quantity,
         od.price,
-
+        od.options,
         p.name,
         p.thumbnail
-
       FROM order_details od
-
       JOIN products p
         ON od.product_id = p.id
-
       WHERE od.order_id = ?
     `, [orderId]);
-
     res.json({
       order: orders[0],
       items
@@ -156,88 +148,52 @@ try {
 
 const orderId = req.params.id;
 
-const [orders] = await db.query(
-
-`
-SELECT
-
-id,
-
-receiver_name,
-
-receiver_phone,
-
-delivery_address,
-
-payment_method,
-
-shipping_fee,
-
-delivery_time,
-
-total_amount,
-
-status,
-
-created_at
-
-FROM orders
-
-WHERE id = ?
-`,
-
-[orderId]
-
-);
-
-if (!orders.length) {
-
-return res.status(404).json({
-
-message:"Không tìm thấy đơn hàng"
-
-});
-
+    const [orders] = await db.query(
+    `
+    SELECT
+    id,
+    receiver_name,
+    receiver_phone,
+    delivery_address,
+    payment_method,
+    shipping_fee,
+    delivery_date,
+    delivery_time,
+    customer_note,
+    total_amount,
+    status,
+    created_at
+    FROM orders
+    WHERE id = ?
+    `,
+    [orderId]
+    );
+    if (!orders.length) {
+    return res.status(404).json({
+    message:"Không tìm thấy đơn hàng"
+    });
 }
 
-const [items] = await db.query(
-
-`
-
-SELECT
-
-od.product_id,
-
-od.quantity,
-
-od.price,
-
-p.name,
-
-p.thumbnail
-
-FROM order_details od
-
-JOIN products p
-
-ON od.product_id=p.id
-
-WHERE od.order_id=?
-
-`,
-
-[orderId]
-
-);
-
-res.json({
-
-order:orders[0],
-
-items
-
+    const [items] = await db.query(
+    `
+    SELECT
+    od.product_id,
+    od.quantity,
+    od.price,
+    od.options,
+    p.name,
+    p.thumbnail
+    FROM order_details od
+    JOIN products p
+    ON od.product_id=p.id
+    WHERE od.order_id=?
+    `,
+    [orderId]
+    );
+    res.json({
+    order:orders[0],
+    items
 });
-
 }
 
 catch(err){
@@ -340,27 +296,81 @@ exports.updateOrderStatus = async (req, res) => {
   }
 };
 
+
+
+exports.cancelMyOrder = async (req, res) => {
+
+  try {
+
+    const userId = req.user.id;
+    const orderId = req.params.id;
+
+    // kiểm tra đơn thuộc user
+    const [orders] = await db.query(
+      `
+      SELECT status
+      FROM orders
+      WHERE id = ?
+      AND user_id = ?
+      `,
+      [orderId, userId]
+    );
+
+    if (!orders.length) {
+      return res.status(404).json({
+        message: "Không tìm thấy đơn hàng"
+      });
+    }
+
+    // chỉ cho hủy khi đang chờ xác nhận
+    if (orders[0].status !== "pending") {
+      return res.status(400).json({
+        message: "Đơn hàng không thể hủy"
+      });
+    }
+
+    await db.query(
+      `
+      UPDATE orders
+      SET status = 'cancelled'
+      WHERE id = ?
+      `,
+      [orderId]
+    );
+
+    res.json({
+      message: "Hủy đơn thành công"
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      message: "Lỗi máy chủ"
+    });
+
+  }
+
+};
+
+
+
 exports.createOrder = async (req, res) => {
   try {
     const {
 
-user_id,
-
-receiver_name,
-
-receiver_phone,
-
-delivery_address,
-
-payment_method,
-
-items,
-
-shipping_fee,
-
-delivery_time
-
-} = req.body;
+    user_id,
+    receiver_name,
+    receiver_phone,
+    delivery_address,
+    payment_method,
+    items,
+    shipping_fee,
+    delivery_date,
+    delivery_time,
+    customer_note
+    } = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({ message: "Giỏ hàng trống" });
@@ -392,11 +402,13 @@ INSERT INTO orders (
   delivery_address,
   payment_method,
   shipping_fee,
+  delivery_date,
   delivery_time,
+  customer_note,
   total_amount,
   status
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `, [
   user_id,
   receiver_name,
@@ -404,7 +416,9 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   delivery_address,
   payment_method,
   shipping_fee,
+  delivery_date,
   delivery_time,
+  customer_note,
   total_amount,
   status
 ]);
@@ -414,18 +428,20 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     // 3. insert order details
     for (const item of items) {
       await db.query(`
-        INSERT INTO order_details (
-          order_id,
-          product_id,
-          quantity,
-          price
-        )
-        VALUES (?, ?, ?, ?)
+      INSERT INTO order_details (
+        order_id,
+        product_id,
+        quantity,
+        price,
+        options
+      )
+      VALUES (?, ?, ?, ?, ?)
       `, [
         orderId,
         item.product_id,
         item.quantity,
-        item.price
+        item.price,
+        JSON.stringify(item.options || {})
       ]);
     }
 

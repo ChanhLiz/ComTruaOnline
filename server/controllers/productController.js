@@ -7,6 +7,7 @@ const getAllProducts = async (req, res) => {
     const sql = `
       SELECT
         p.id,
+        p.category_id,
         p.name,
         p.description,
         p.old_price,
@@ -42,6 +43,7 @@ const getProductById = async (req, res) => {
     const sql = `
       SELECT
         p.id,
+        p.category_id,
         p.name,
         p.description,
         p.old_price,
