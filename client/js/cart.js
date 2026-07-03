@@ -55,7 +55,7 @@ if(options.extraRice){
 
     optionHtml += `
     <small class="text-muted d-block">
-        🍚 Cơm thêm
+        Cơm thêm
     </small>
     `;
 
@@ -65,7 +65,7 @@ if(options.extraNoodle){
 
     optionHtml += `
     <small class="text-muted d-block">
-        🍜 Bún thêm
+        Bún thêm
     </small>
     `;
 
@@ -75,7 +75,7 @@ if(options.extraMi){
 
     optionHtml += `
     <small class="text-muted d-block">
-        🍜 Mì thêm
+        Mì thêm
     </small>
     `;
 
@@ -95,7 +95,7 @@ if(options.spicyLevel){
 
     optionHtml += `
     <small class="text-muted d-block">
-        🌶 ${options.spicyLevel}
+        ${options.spicyLevel}
     </small>
     `;
 

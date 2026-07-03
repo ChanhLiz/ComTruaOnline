@@ -14,6 +14,9 @@ return "Đã xác nhận";
 case "shipping":
 return "Đang giao";
 
+case "delivered":
+return "Đã giao";
+
 case "completed":
 return "Hoàn thành";
 
@@ -127,6 +130,13 @@ async function loadOrders() {
         ${order.status==="shipping"?"selected":""}
         >
         Đang giao
+        </option>
+
+        <option
+        value="delivered"
+        ${order.status==="delivered"?"selected":""}
+        >
+        Đã giao
         </option>
 
         <option
@@ -301,19 +311,22 @@ document.getElementById(
 }
 
 async function updateStatus(id,status){
-await fetch(
-`/api/orders/${id}/status`,
-{
-method:"PUT",
-
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-status
-})
-}
+const res = await fetch(
+  `/api/orders/${id}/status`,
+  {
+    method:"PUT",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({status})
+  }
 );
+
+const data = await res.json();
+
+if(!res.ok){
+    alert(data.message);
+}
 
 await loadOrders();
 }
@@ -337,7 +350,7 @@ function renderOptions(options){
 
         html += `
         <div class="text-success small">
-            ✔ Cơm thêm (+5.000đ)
+            Cơm thêm (+5.000đ)
         </div>
         `;
 
@@ -347,7 +360,7 @@ function renderOptions(options){
 
         html += `
         <div class="text-success small">
-            ✔ Bún thêm (+5.000đ)
+            Bún thêm (+5.000đ)
         </div>
         `;
 
@@ -357,7 +370,7 @@ function renderOptions(options){
 
         html += `
         <div class="text-success small">
-            ✔ Mì thêm (+5.000đ)
+            Mì thêm (+5.000đ)
         </div>
         `;
 
@@ -367,7 +380,7 @@ function renderOptions(options){
 
         html += `
         <div class="text-success small">
-            ✔ Thêm đá
+            Thêm đá
         </div>
         `;
 
@@ -377,7 +390,7 @@ function renderOptions(options){
 
         html += `
         <div class="small">
-            🌶 ${options.spicyLevel}
+            ${options.spicyLevel}
         </div>
         `;
 

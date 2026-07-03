@@ -68,23 +68,23 @@ function renderCart() {
     const opt = item.options || {};
 
     if(opt.extraRice){
-        optionHtml += "🍚 Cơm thêm (+5.000đ)<br>";
+        optionHtml += "Cơm thêm (+5.000đ)<br>";
     }
 
     if(opt.extraNoodle){
-        optionHtml += "🍜 Bún thêm (+5.000đ)<br>";
+        optionHtml += "Bún thêm (+5.000đ)<br>";
     }
 
     if(opt.extraMi){
-        optionHtml += "🍜 Mì thêm (+5.000đ)<br>";
+        optionHtml += "Mì thêm (+5.000đ)<br>";
     }
 
     if(opt.extraIce){
-        optionHtml += "🧊 Thêm đá<br>";
+        optionHtml += "Thêm đá<br>";
     }
 
     if(opt.spicyLevel){
-        optionHtml += `🌶 ${opt.spicyLevel}<br>`;
+        optionHtml += `${opt.spicyLevel}<br>`;
     }
 
     if(opt.note){

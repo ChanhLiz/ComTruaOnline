@@ -234,6 +234,26 @@ exports.updateOrderStatus = async (req, res) => {
 
     const oldStatus = orders[0].status;
 
+    const allowedTransitions = {
+  waiting_payment: ["pending"],
+  pending: ["confirmed", "cancelled"],
+  confirmed: ["shipping"],
+  shipping: ["delivered"],
+  delivered: ["completed"],
+  completed: [],
+  cancelled: []
+};
+
+if (
+  !allowedTransitions[oldStatus].includes(status)
+) {
+
+  return res.status(400).json({
+    message: "Không thể chuyển sang trạng thái này"
+  });
+
+}
+
     // Chỉ trừ kho lần đầu xác nhận
     if (
       oldStatus !== "confirmed" &&
@@ -340,6 +360,65 @@ exports.cancelMyOrder = async (req, res) => {
 
     res.json({
       message: "Hủy đơn thành công"
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      message: "Lỗi máy chủ"
+    });
+
+  }
+
+};
+
+
+exports.confirmReceived = async (req, res) => {
+
+  try {
+
+    const userId = req.user.id;
+    const orderId = req.params.id;
+
+    const [orders] = await db.query(
+      `
+      SELECT status
+      FROM orders
+      WHERE id = ?
+      AND user_id = ?
+      `,
+      [orderId, userId]
+    );
+
+    if (!orders.length) {
+
+      return res.status(404).json({
+        message: "Không tìm thấy đơn hàng"
+      });
+
+    }
+
+    if (orders[0].status !== "delivered") {
+
+      return res.status(400).json({
+        message: "Đơn hàng chưa được giao"
+      });
+
+    }
+
+    await db.query(
+      `
+      UPDATE orders
+      SET status = 'completed'
+      WHERE id = ?
+      `,
+      [orderId]
+    );
+
+    res.json({
+      message: "Đã xác nhận nhận hàng"
     });
 
   } catch (err) {

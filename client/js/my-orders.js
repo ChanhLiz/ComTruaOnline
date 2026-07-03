@@ -150,6 +150,21 @@ Xem chi tiết
 </button>
 
 ${
+order.status==="delivered"
+?
+`
+<button
+class="btn btn-success mt-2"
+onclick="confirmReceived(${order.id})">
+Đã nhận hàng
+</button>
+`
+:
+""
+}
+
+
+${
 order.status === "pending"
 ?
 `
@@ -180,27 +195,24 @@ function renderStatus(status){
 switch(status){
 
 case "waiting_payment":
-
 return "Chờ thanh toán";
 
 case "pending":
-
 return "Chờ xác nhận";
 
 case "confirmed":
-
 return "Đã xác nhận";
 
 case "shipping":
-
 return "Đang giao";
 
-case "completed":
+case "delivered":
+return "Đã giao";
 
+case "completed":
 return "Hoàn thành";
 
 case "cancelled":
-
 return "Đã hủy";
 
 default:
@@ -442,6 +454,38 @@ loadOrders();
 
 }
 
+
+async function confirmReceived(id){
+
+const ok = confirm(
+"Xác nhận bạn đã nhận được hàng?"
+);
+
+if(!ok) return;
+
+const token =
+localStorage.getItem("token");
+
+const res =
+await fetch(
+"/api/orders/my/"+id+"/received",
+{
+method:"PUT",
+headers:{
+Authorization:
+"Bearer "+token
+}
+}
+);
+
+const data =
+await res.json();
+alert(data.message);
+loadOrders();
+
+}
+
+
 function renderOptions(options){
 
     if(typeof options === "string"){
@@ -460,7 +504,7 @@ function renderOptions(options){
 
         html += `
         <div class="text-success small">
-            ✔ Cơm thêm (+5.000đ)
+            Cơm thêm (+5.000đ)
         </div>
         `;
 
@@ -470,7 +514,7 @@ function renderOptions(options){
 
         html += `
         <div class="text-success small">
-            ✔ Bún thêm (+5.000đ)
+            Bún thêm (+5.000đ)
         </div>
         `;
 
@@ -480,7 +524,7 @@ function renderOptions(options){
 
         html += `
         <div class="text-success small">
-            ✔ Mì thêm (+5.000đ)
+            Mì thêm (+5.000đ)
         </div>
         `;
 
@@ -490,7 +534,7 @@ function renderOptions(options){
 
         html += `
         <div class="text-success small">
-            ✔ Thêm đá
+            Thêm đá
         </div>
         `;
 
@@ -500,7 +544,7 @@ function renderOptions(options){
 
         html += `
         <div class="small">
-            🌶 ${options.spicyLevel}
+            ${options.spicyLevel}
         </div>
         `;
 

@@ -9,7 +9,8 @@ const {
   getOrderDetail,
   updateOrderStatus,
   createOrder,
-  cancelMyOrder
+  cancelMyOrder,
+  confirmReceived
 } = require("../controllers/orderController");
 
 router.get("/", getAllOrders);
@@ -17,6 +18,7 @@ router.post("/", createOrder);
 router.get("/my", authMiddleware, getMyOrders);
 router.get("/my/:id", authMiddleware, getMyOrderDetail);
 router.put("/my/:id/cancel", authMiddleware, cancelMyOrder);
+router.put("/my/:id/received", authMiddleware, confirmReceived);
 router.get("/:id", getOrderDetail);
 router.put("/:id/status", updateOrderStatus);
 
