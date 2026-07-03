@@ -210,17 +210,20 @@ ${order.payment_method}
 
 
 <tr>
-<th>Khung giờ</th>
+<th>
+Ngày giao
+</th>
 <td>
-${order.delivery_time}
+${new Date(order.delivery_date)
+.toLocaleDateString("vi-VN")}
 </td>
 </tr>
 
 
 <tr>
-<th>Ngày giao</th>
+<th>Khung giờ</th>
 <td>
-${order.delivery_date || ""}
+${order.delivery_time}
 </td>
 </tr>
 

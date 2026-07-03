@@ -434,6 +434,50 @@ exports.confirmReceived = async (req, res) => {
 };
 
 
+exports.confirmPayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [orders] = await db.query(
+      `
+      SELECT status
+      FROM orders
+      WHERE id = ?
+      `,
+      [id]
+    );
+    if (!orders.length) {
+
+      return res.status(404).json({
+        message: "Không tìm thấy đơn hàng"
+      });
+    }
+    if (orders[0].status !== "waiting_payment") {
+      return res.status(400).json({
+        message: "Đơn không ở trạng thái chờ thanh toán"
+      });
+
+    }
+    await db.query(
+      `
+      UPDATE orders
+      SET status='pending'
+      WHERE id=?
+      `,
+      [id]
+    );
+    res.json({
+      message:"Đã xác nhận thanh toán"
+    });
+  } catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      message:"Lỗi máy chủ"
+    });
+  }
+};
+
 
 exports.createOrder = async (req, res) => {
   try {

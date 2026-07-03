@@ -367,20 +367,27 @@ async function createOrder(orderData) {
     `cart_${user.id}`
   );
 
-  window.location.href =
-    "/pages/payment-success.html";
+  return data.order_id;
 }
 
 async function confirmPayment() {
-  if (isSubmitting) return;
-
+  if(isSubmitting) return;
   clearInterval(countdownInterval);
-
   isSubmitting = true;
-
-  await createOrder(pendingOrderData);
-
-  isSubmitting = false;
+  try{
+      const orderId =
+      await createOrder(pendingOrderData);
+      await fetch(
+          "/api/orders/" + orderId + "/payment",
+          {
+              method:"PUT"
+          }
+      );
+      window.location.href =
+      "/pages/payment-success.html";
+  }finally{
+      isSubmitting = false;
+  }
 }
 
 

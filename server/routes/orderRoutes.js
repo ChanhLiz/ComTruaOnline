@@ -10,7 +10,8 @@ const {
   updateOrderStatus,
   createOrder,
   cancelMyOrder,
-  confirmReceived
+  confirmReceived,
+  confirmPayment
 } = require("../controllers/orderController");
 
 router.get("/", getAllOrders);
@@ -21,5 +22,6 @@ router.put("/my/:id/cancel", authMiddleware, cancelMyOrder);
 router.put("/my/:id/received", authMiddleware, confirmReceived);
 router.get("/:id", getOrderDetail);
 router.put("/:id/status", updateOrderStatus);
+router.put("/:id/payment", confirmPayment);
 
 module.exports = router;

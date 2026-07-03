@@ -47,32 +47,23 @@ el.innerHTML =
 orders.map(order=>`
 
 <div class="card mb-3">
-
 <div class="card-body">
-
 <div class="row">
-
 <div class="col-md-8">
 
 <h5>
-
 Đơn #${order.id}
-
 </h5>
 
 <p>
-
 Ngày đặt:
 ${new Date(order.created_at)
 .toLocaleString("vi-VN")}
-
 </p>
 
 <p>
-
 Ngày giao:
 <b>
-
 ${
 order.delivery_date
 ?
@@ -80,67 +71,45 @@ new Date(order.delivery_date).toLocaleDateString("vi-VN")
 :
 ""
 }
-
 </b>
 
 <br>
-
 Khung giờ:
-
 <b>
-
 ${order.delivery_time}
-
 </b>
-
 </p>
 
 <p>
 
 Phí ship:
 <b>
-
 ${
 Number(order.shipping_fee) === 0
 ? "0đ (Miễn phí đơn từ 150k)"
 : Number(order.shipping_fee).toLocaleString("vi-VN") + "đ"
 }
-
 </b>
-
 </p>
 
 <p>
-
 Thanh toán:
-
 <b>
-
 ${order.payment_method}
-
 </b>
-
 </p>
-
 </div>
 
 <div class="col-md-4 text-end">
-
 <h5 class="text-danger">
-
 ${Number(order.total_amount)
 .toLocaleString("vi-VN")}đ
-
 </h5>
 
 <p>
-
 <b>
-
 ${renderStatus(order.status)}
-
 </b>
-
 </p>
 
 <button
@@ -269,6 +238,12 @@ Thông tin giao hàng
 
 
 <tr>
+<th>Địa chỉ</th>
+<td>${order.delivery_address}</td>
+</tr>
+
+
+<tr>
 <th>
 Ngày giao
 </th>
@@ -279,10 +254,6 @@ ${new Date(order.delivery_date)
 </tr>
 
 
-<tr>
-<th>Địa chỉ</th>
-<td>${order.delivery_address}</td>
-</tr>
 <tr>
 <th>Khung giờ</th>
 <td>${order.delivery_time}</td>
