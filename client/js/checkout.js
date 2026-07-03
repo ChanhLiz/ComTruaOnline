@@ -7,6 +7,7 @@ let countdownInterval = null;
 let timeLeft = 900;
 
 let selectedPayment = null;
+let currentOrderId = null;
 
 if (!user) {
   alert("Vui lòng đăng nhập trước khi thanh toán");
@@ -254,19 +255,19 @@ const shipping_fee = subtotal >= 150000 ? 0 : 15000;
     }))
   };
 
-  // COD
+  // Tạo đơn trước
+if (isSubmitting) return;
+isSubmitting = true;
+try {
+  currentOrderId = await createOrder(pendingOrderData);
+  // COD -> hoàn tất luôn
   if (payment_method === "cod") {
-  if (isSubmitting) return;
-
-  isSubmitting = true;
-
-  try {
-    await createOrder(pendingOrderData);
-  } finally {
-    isSubmitting = false;
+    window.location.href =
+      "/pages/payment-success.html";
+    return;
   }
-
-  return;
+} finally {
+  isSubmitting = false;
 }
 
   // PAYMENT METHODS
@@ -355,38 +356,34 @@ async function createOrder(orderData) {
 
   if (!res.ok) {
     alert(data.message || "Đặt hàng thất bại");
-    return;
+    return null;
   }
-
-  localStorage.setItem(
-    "last_order_id",
-    data.order_id
-  );
-
-  localStorage.removeItem(
-    `cart_${user.id}`
-  );
-
   return data.order_id;
 }
 
 async function confirmPayment() {
-  if(isSubmitting) return;
+  if (isSubmitting) return;
   clearInterval(countdownInterval);
   isSubmitting = true;
-  try{
-      const orderId =
-      await createOrder(pendingOrderData);
-      await fetch(
-          "/api/orders/" + orderId + "/payment",
-          {
-              method:"PUT"
-          }
-      );
-      window.location.href =
+  try {
+    await fetch(
+      "/api/orders/" + currentOrderId + "/payment",
+      {
+        method: "PUT"
+      }
+    );
+    localStorage.setItem(
+      "last_order_id",
+      currentOrderId
+    );
+    localStorage.removeItem(
+      `cart_${user.id}`
+    );
+    window.location.href =
       "/pages/payment-success.html";
-  }finally{
-      isSubmitting = false;
+
+  } finally {
+    isSubmitting = false;
   }
 }
 
@@ -397,7 +394,7 @@ function startCountdown() {
   timeLeft = 900;
   updateCountdown();
 
-  countdownInterval = setInterval(() => {
+  countdownInterval = setInterval(async() => {
     timeLeft--;
 
     updateCountdown();
@@ -407,12 +404,24 @@ function startCountdown() {
 
       alert("Hết thời gian thanh toán");
 
-      const modalEl = document.getElementById("bankModal");
-      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (currentOrderId) {
+        await fetch(
+          "/api/orders/" + currentOrderId + "/payment/cancel",
+          {
+            method: "PUT"
+          }
+        );
+      }
+
+      const modalEl =
+        document.getElementById("bankModal");
+
+      const modal =
+        bootstrap.Modal.getInstance(modalEl);
 
       modal.hide();
-
       pendingOrderData = null;
+      currentOrderId = null;
       isSubmitting = false;
     }
   }, 1000);
@@ -466,11 +475,24 @@ document.querySelectorAll(".payment-item").forEach(item => {
   });
 });
 
-function cancelPayment(){
+async function cancelPayment() {
   clearInterval(countdownInterval);
-  const modal = bootstrap.Modal.getInstance(document.getElementById("bankModal"));
+  if (currentOrderId) {
+    await fetch(
+      "/api/orders/" + currentOrderId + "/payment/cancel",
+      {
+        method: "PUT"
+      }
+    );
+  }
+  const modal =
+    bootstrap.Modal.getInstance(
+      document.getElementById("bankModal")
+    );
   modal.hide();
   pendingOrderData = null;
+  currentOrderId = null;
+  isSubmitting = false;
 }
 
 

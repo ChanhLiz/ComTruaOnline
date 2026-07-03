@@ -228,9 +228,9 @@ function renderMenu(day) {
                   ? `
                   <button
                     class="btn btn-warning"
-                    onclick="editPrice(${product.id})"
+                    onclick='editPrice(${JSON.stringify(product)})'
                   >
-                    Sửa giá
+                    Sửa thông tin món
                   </button>
 
                   <button
@@ -341,47 +341,56 @@ sortSelect.addEventListener("change", () => {
 });
   loadWeeklyMenu();
 
-async function editPrice(productId) {
+async function editPrice(product) {
+  const oldPrice = prompt(
+    "Giá gốc:",
+    product.old_price
+  );
 
-  const oldPrice =
-    prompt("Giá gốc:");
+  if (oldPrice === null) return;
 
-  if (!oldPrice) return;
+  const discount = prompt(
+    "Giảm giá % (0 nếu không giảm):",
+    product.discount_percent
+  );
 
-  const newPrice =
-    prompt("Giá bán:");
+  if (discount === null) return;
 
-  if (!newPrice) return;
+  const stock = prompt(
+    "Số lượng còn lại:",
+    product.stock
+  );
 
-  const discount =
-    prompt("Giảm giá % (0 nếu không giảm)");
+  if (stock === null) return;
 
-  const stock =
-  prompt("Số lượng còn lại:");
+  const description = prompt(
+    "Mô tả món ăn:",
+    product.description || ""
+  );
+
+  if (description === null) return;
 
   const res = await fetch(
-    `/api/products/${productId}/`,
+    `/api/products/${product.id}`,
     {
       method: "PUT",
       headers: {
-        "Content-Type":
-          "application/json"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-      old_price: Number(oldPrice),
-      discount_percent:
-      Number(discount || 0),
-      stock:
-      Number(stock || 0)
-})
+        old_price: Number(oldPrice),
+        discount_percent: Number(discount),
+        stock: Number(stock),
+        description
+      })
     }
   );
-
-  const data =
-    await res.json();
+  const data = await res.json();
   alert(data.message);
   loadWeeklyMenu();
 }
+
+
 async function deleteMenu(id) {
 
   const ok = confirm(

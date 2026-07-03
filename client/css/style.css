@@ -654,110 +654,72 @@ body {
 ========================== */
 
 .floating-contact{
-
     position:fixed;
-
     left:22px;
     bottom:40px;
-
     display:flex;
     flex-direction:column;
     gap:16px;
-
     z-index:9999;
 
 }
 
 .floating-item{
-
     position:relative;
-
     width:60px;
     height:60px;
-
     border-radius:50%;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     text-decoration:none;
-
     color:#fff;
-
     font-size:28px;
-
     box-shadow:0 8px 20px rgba(0,0,0,.2);
-
     animation:floating 2s ease-in-out infinite;
-
     transition:.25s;
-
 }
 
 /* Hiệu ứng đung đưa */
 
 @keyframes floating{
-
     0%{
-
         transform:translateY(0);
-
     }
-
     50%{
-
         transform:translateY(-8px);
-
     }
-
     100%{
-
         transform:translateY(0);
-
     }
-
 }
 
 .floating-item:hover{
-
     transform:scale(1.08);
-
 }
 
 /* Logo Zalo */
 
 .floating-item img{
-
     width:36px;
     height:36px;
-
 }
 
 /* Màu */
-
 .zalo{
-
     background:#ffffff;
-
 }
 
 .facebook{
-
     background:#1877F2;
-
 }
 
 .tiktok{
-
     background:#000;
-
 }
 
 .support{
-
     background:#22c55e;
-
 }
 
 /* ===================
@@ -765,69 +727,52 @@ body {
 =================== */
 
 .floating-label{
-
     position:absolute;
-
     left:75px;
-
     top:50%;
-
     transform:translateY(-50%) translateX(-15px);
-
     white-space:nowrap;
-
     background:#fff;
-
     color:#333;
-
     padding:10px 18px;
-
     border-radius:30px;
-
     font-size:15px;
-
     font-weight:600;
-
     box-shadow:0 6px 16px rgba(0,0,0,.18);
-
     opacity:0;
-
     visibility:hidden;
-
     transition:.28s;
-
 }
 
 /* Mũi tên */
-
 .floating-label::before{
-
     content:"";
-
     position:absolute;
-
     left:-8px;
-
     top:50%;
-
     transform:translateY(-50%);
-
     border-width:8px 8px 8px 0;
-
     border-style:solid;
-
     border-color:transparent #fff transparent transparent;
-
 }
 
 /* Hover */
 
 .floating-item:hover .floating-label{
-
     opacity:1;
-
     visibility:visible;
-
     transform:translateY(-50%) translateX(0);
+}
 
+/* Chứng nhận */
+.footer-license{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin:18px 0;
+    flex-wrap:wrap;
+}
+
+.footer-license .btn{
+    min-width:210px;
 }

@@ -88,6 +88,7 @@ const updateProduct = async (req, res) => {
     const {
   old_price,
   discount_percent,
+  description,
   stock
 } = req.body;
 
@@ -101,6 +102,7 @@ const updateProduct = async (req, res) => {
     old_price = ?,
     new_price = ?,
     discount_percent = ?,
+    description = ?,
     stock = ?
   WHERE id = ?
 `;
@@ -111,6 +113,7 @@ const updateProduct = async (req, res) => {
   old_price,
   new_price,
   discount_percent,
+  description,
   stock,
   id
 ]
