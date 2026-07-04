@@ -1,4 +1,3 @@
-console.log("APP FILE:", __filename);
 const path = require("path");
 require("dotenv").config();
 
@@ -10,7 +9,6 @@ require("./config/db");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const weeklyMenuRoutes = require("./routes/weeklyMenuRoutes");
-console.log("weeklyMenuRoutes =", weeklyMenuRoutes);
 const app = express();
 
 app.use(cors());

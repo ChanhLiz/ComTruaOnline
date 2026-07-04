@@ -152,7 +152,7 @@ function renderMenu(day) {
   if (!menus.length) {
     weeklyMenuList.innerHTML = `
       <div class="col-12 text-center text-muted">
-        Chưa có thực đơn cho ngày này
+        Không có trong thực đơn
       </div>
     `;
     return;
@@ -413,6 +413,7 @@ async function deleteMenu(id) {
 
 
 let allProducts = [];
+let selectedProductId = null;
 
 async function showAddMenuForm(){
 
@@ -432,22 +433,31 @@ async function showAddMenuForm(){
 
 function renderProductList(products){
 
-    const select =
-        document.getElementById("productSelect");
+    const list =
+        document.getElementById("productList");
 
-    select.innerHTML="";
-
+    list.innerHTML = "";
     products.forEach(product=>{
-
-        select.innerHTML+=`
-            <option value="${product.id}">
+        list.innerHTML += `
+            <div
+                class="list-group-item product-item"
+                data-id="${product.id}"
+            >
                 ${product.id} - ${product.name}
-            </option>
+            </div>
         `;
-
     });
-
 }
+
+document.addEventListener("click", function(e){
+    if(!e.target.classList.contains("product-item"))
+        return;
+    document.querySelectorAll(".product-item")
+        .forEach(item => item.classList.remove("active"));
+    e.target.classList.add("active");
+    selectedProductId =
+        Number(e.target.dataset.id);
+});
 
 document.addEventListener("input",function(e){
 
@@ -471,10 +481,7 @@ document.addEventListener("input",function(e){
 
 async function submitAddMenu(){
 
-    const product_id =
-        Number(
-            document.getElementById("productSelect").value
-        );
+    const product_id = selectedProductId;
 
     const day_of_week =
         Number(
