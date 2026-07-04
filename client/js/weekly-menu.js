@@ -393,22 +393,31 @@ async function editPrice(product) {
 
 async function deleteMenu(id) {
 
-  const ok = confirm(
-    "Xóa món khỏi thực đơn?"
-  );
+    showConfirm(
+        "Bạn muốn xóa món này khỏi thực đơn?",
 
-  if (!ok) return;
+        async ()=>{
+            const res = await fetch(
+                `/api/weekly-menu/${id}`,
+                {
+                    method:"DELETE"
+                }
+            );
 
-  const res = await fetch(
-    `/api/weekly-menu/${id}`,
-    {
-      method: "DELETE"
-    }
-  );
+            const data = await res.json();
 
-  const data = await res.json();
-  alert(data.message);
-  loadWeeklyMenu();
+            await loadWeeklyMenu();
+
+          setTimeout(() => {
+              showConfirm(
+                  data.message,
+                  null,
+                  "Thành công"
+              );
+          }, 200);
+        },
+        "Xóa món"
+    );
 }
 
 
@@ -480,7 +489,6 @@ document.addEventListener("input",function(e){
 });
 
 async function submitAddMenu(){
-
     const product_id = selectedProductId;
 
     const day_of_week =
@@ -489,44 +497,53 @@ async function submitAddMenu(){
         );
 
     if(!product_id){
-
-        alert("Vui lòng chọn món.");
-
+        showConfirm(
+            "Vui lòng chọn món.",
+            null,
+            "Thông báo"
+        );
         return;
-
     }
 
-    const res =
-        await fetch("/api/weekly-menu",{
+    showConfirm(
 
-            method:"POST",
+        "Bạn muốn thêm món này vào thực đơn?",
+        async ()=>{
 
-            headers:{
-                "Content-Type":"application/json"
-            },
+            const res =
+                await fetch("/api/weekly-menu",{
 
-            body:JSON.stringify({
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
 
-                product_id,
-                day_of_week
+                    body:JSON.stringify({
+                        product_id,
+                        day_of_week
+                    })
+                });
 
-            })
+            const data =
+                await res.json();
 
-        });
+            bootstrap.Modal
+              .getInstance(
+                  document.getElementById("addMenuModal")
+              )
+              .hide();
 
-    const data =
-        await res.json();
-
-    alert(data.message);
-
-    bootstrap.Modal
-        .getInstance(
-            document.getElementById("addMenuModal")
-        )
-        .hide();
-
-    loadWeeklyMenu();
-
+          await loadWeeklyMenu();
+          setTimeout(() => {
+              showConfirm(
+                  data.message,
+                  null,
+                  "Thành công"
+              );
+          }, 200);
+        },
+        "Thêm món"
+    );
 }
 
 
