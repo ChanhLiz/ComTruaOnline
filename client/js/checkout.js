@@ -260,12 +260,21 @@ if (isSubmitting) return;
 isSubmitting = true;
 try {
   currentOrderId = await createOrder(pendingOrderData);
-  // COD -> hoàn tất luôn
+
+  // COD
   if (payment_method === "cod") {
+    localStorage.setItem(
+        "last_order_id",
+        currentOrderId
+    );
+    localStorage.removeItem(
+        `cart_${user.id}`
+    );
     window.location.href =
-      "/pages/payment-success.html";
+        "/pages/payment-success.html";
     return;
-  }
+}
+
 } finally {
   isSubmitting = false;
 }

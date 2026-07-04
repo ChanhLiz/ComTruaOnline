@@ -25,38 +25,60 @@ async function loadProduct() {
 
     container.innerHTML = `
   <div class="row">
-
     <div class="col-md-6">
       <img src="${img}" class="img-fluid rounded shadow">
     </div>
 
     <div class="col-md-6">
-
       <h2>${product.name}</h2>
-
       <p>${product.description}</p>
-
       <h4 class="text-danger">
+  
+  
+      <div class="mb-3">
+${
+Number(product.discount_percent) > 0
+?
+`
+<span class="badge bg-danger mb-2">
+-${product.discount_percent}%
+</span>
 
-  ${Number(product.new_price).toLocaleString("vi-VN")}đ
-
-  <small class="${
-    product.stock > 0
-      ? "text-secondary"
-      : "text-danger fw-bold"
-  }">
-
-    |
-
-    ${
-      product.stock > 0
-        ? `Còn lại ${product.stock} suất`
-        : "HẾT HÀNG"
-    }
-
-  </small>
-
+<div>
+<small
+class="text-decoration-line-through text-muted"
+>
+${Number(product.old_price)
+.toLocaleString("vi-VN")}đ
+</small>
+</div>
+`
+:
+""
+}
+<h4 class="text-danger">
+${Number(product.new_price)
+.toLocaleString("vi-VN")}đ
+<small
+class="${
+product.stock > 0
+?
+"text-secondary"
+:
+"text-danger fw-bold"
+}"
+>
+|
+${
+product.stock > 0
+?
+`Còn lại ${product.stock} suất`
+:
+"HẾT HÀNG"
+}
+</small>
 </h4>
+</div>
 
 <button
   id="addToCartBtn"

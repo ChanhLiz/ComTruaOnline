@@ -101,8 +101,9 @@ async function loadOrders() {
         <td>
         <select
         class="form-select form-select-sm"
-        onchange="updateStatus(${order.id},this.value)"
-        >
+        data-old-status="${order.status}"
+        onchange="updateStatus(${order.id},this)">
+        
 
         <option
         value="waiting_payment"
@@ -313,25 +314,96 @@ document.getElementById(
 ).show();
 }
 
-async function updateStatus(id,status){
-const res = await fetch(
-  `/api/orders/${id}/status`,
-  {
-    method:"PUT",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify({status})
-  }
-);
+async function updateStatus(id, select){
 
-const data = await res.json();
+    const oldStatus =
+        select.dataset.oldStatus;
 
-if(!res.ok){
-    alert(data.message);
-}
+    const newStatus =
+        select.value;
 
-await loadOrders();
+    const flow = [
+        "waiting_payment",
+        "pending",
+        "confirmed",
+        "shipping",
+        "delivered",
+        "completed"
+    ];
+
+    if(newStatus === "cancelled"){
+
+        showConfirm(
+            "Không thể chọn trạng thái này.",
+            null,
+            "Thông báo"
+        );
+
+        select.value = oldStatus;
+        return;
+    }
+
+    const oldIndex =
+        flow.indexOf(oldStatus);
+
+    const newIndex =
+        flow.indexOf(newStatus);
+
+    if(newIndex !== oldIndex + 1){
+
+        showConfirm(
+            "Không thể chọn trạng thái này.",
+            null,
+            "Thông báo"
+        );
+
+        select.value = oldStatus;
+        return;
+    }
+
+    showConfirm(
+        "Bạn muốn đổi trạng thái đơn hàng này?",
+        async()=>{
+
+            const res = await fetch(
+
+                `/api/orders/${id}/status`,
+                {
+                    method:"PUT",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({
+                        status:newStatus
+                    })
+                }
+            );
+
+            const data =
+                await res.json();
+
+            if(!res.ok){
+                showConfirm(
+                    data.message,
+                    null,
+                    "Thông báo"
+                );
+                select.value =
+                    oldStatus;
+                return;
+            }
+
+            await loadOrders();
+
+            showConfirm(
+                "Đã cập nhật trạng thái.",
+                null,
+                "Thành công"
+            );
+        },
+        "Xác nhận"
+    );
+    select.value = oldStatus;
 }
 
 

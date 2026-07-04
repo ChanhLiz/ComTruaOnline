@@ -13,27 +13,71 @@ async function loadProfile() {
   document.getElementById("address").value = user.address || "";
 }
 
+
+
 async function saveProfile() {
-  const full_name = document.getElementById("full_name").value;
-  const phone = document.getElementById("phone").value;
-  const address = document.getElementById("address").value;
 
-  const res = await fetch("/api/users/me", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token")
+  const full_name =
+    document.getElementById("full_name").value;
+
+  const phone =
+    document.getElementById("phone").value;
+
+  const address =
+    document.getElementById("address").value;
+
+  showConfirm(
+    "Bạn muốn lưu thay đổi hồ sơ?",
+    async () => {
+
+      const res = await fetch("/api/users/me", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+          full_name,
+          phone,
+          address
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showConfirm(
+          data.message || "Có lỗi xảy ra",
+          null,
+          "Thông báo"
+        );
+        return;
+      }
+
+      // Cập nhật localStorage
+      const user =
+        JSON.parse(localStorage.getItem("user"));
+
+      user.full_name = full_name;
+      user.phone = phone;
+      user.address = address;
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify(user)
+      );
+
+      showConfirm(
+        "Cập nhật thành công.",
+        () => {
+          location.reload();
+        },
+        "Thành công"
+      );
     },
-    body: JSON.stringify({
-      full_name,
-      phone,
-      address
-    })
-  });
-
-  const data = await res.json();
-
-  alert(data.message || "Cập nhật thành công");
+    "Xác nhận"
+  );
 }
 
 loadProfile();

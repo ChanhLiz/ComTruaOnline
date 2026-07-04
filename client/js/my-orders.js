@@ -387,11 +387,48 @@ document.getElementById(
 
 async function cancelOrder(id){
 
-const ok = confirm(
-"Bạn chắc chắn muốn hủy đơn hàng này?"
+showConfirm(
+"Bạn chắc chắn muốn hủy đơn hàng này?",
+async ()=>{
+const token =
+localStorage.getItem("token");
+
+const res =
+await fetch(
+"/api/orders/my/" + id + "/cancel",
+{
+method:"PUT",
+headers:{
+Authorization:
+"Bearer " + token
+}
+}
 );
 
-if(!ok) return;
+const data =
+await res.json();
+
+if(!res.ok){
+
+showConfirm(
+data.message,
+null,
+"Thông báo"
+);
+return;
+}
+
+showConfirm(
+"Hủy đơn thành công",
+null,
+"Thành công"
+);
+
+loadOrders();
+},
+"Xác nhận hủy đơn"
+);
+return;
 
 const token =
 localStorage.getItem("token");
@@ -427,12 +464,39 @@ loadOrders();
 
 
 async function confirmReceived(id){
+    
+showConfirm(
+"Xác nhận bạn đã nhận được hàng?",
+async ()=>{
 
-const ok = confirm(
-"Xác nhận bạn đã nhận được hàng?"
+const token =
+localStorage.getItem("token");
+
+const res =
+await fetch(
+"/api/orders/my/"+id+"/received",
+{
+method:"PUT",
+headers:{
+Authorization:
+"Bearer "+token
+}
+}
 );
 
-if(!ok) return;
+const data =
+await res.json();
+
+showConfirm(
+data.message,
+null,
+"Thông báo"
+);
+loadOrders();
+},
+"Xác nhận"
+);
+return;
 
 const token =
 localStorage.getItem("token");

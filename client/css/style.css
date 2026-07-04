@@ -764,15 +764,44 @@ body {
     transform:translateY(-50%) translateX(0);
 }
 
-/* Chứng nhận */
+/* Giấy phép */
+
 .footer-license{
     display:flex;
     justify-content:center;
-    gap:15px;
-    margin:18px 0;
+    gap:18px;
+    margin:25px 0;
     flex-wrap:wrap;
 }
 
-.footer-license .btn{
-    min-width:210px;
+.license-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:260px;
+    padding:14px 22px;
+    border-radius:14px;
+    text-decoration:none;
+    font-weight:600;
+    font-size:15px;
+    transition:.25s;
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.08);
+}
+
+.business-license{
+    background:#0d6efd;
+    color:white;
+}
+
+.food-license{
+    background:#198754;
+    color:white;
+}
+
+.license-btn:hover{
+    transform:translateY(-3px);
+    color:white;
+    box-shadow:
+        0 10px 24px rgba(0,0,0,.18);
 }
