@@ -36,7 +36,6 @@ const weekdays = [
 // DB: 1 = Thứ 2 ... 7 = Chủ nhật
 function getCurrentDay() {
   const day = new Date().getDay();
-
   return day === 0 ? 7 : day;
 }
 

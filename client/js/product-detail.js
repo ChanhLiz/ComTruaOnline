@@ -1,3 +1,10 @@
+function getCurrentDay() {
+    const day = new Date().getDay();
+    return day === 0 ? 7 : day;
+}
+
+const today = getCurrentDay();
+
 document.addEventListener("DOMContentLoaded", () => {
   loadProduct();
 });
@@ -18,6 +25,13 @@ async function loadProduct() {
     if (!res.ok) throw new Error("API lỗi");
 
     const product = await res.json();
+
+    const menuRes = await fetch("/api/weekly-menu");
+    const weeklyMenus = await menuRes.json();
+    const isOnSaleToday = weeklyMenus.some(item =>
+        Number(item.id) === Number(product.id) &&
+        Number(item.day_of_week) === today
+    );
 
     const img = product.thumbnail
       ? product.thumbnail
@@ -83,16 +97,20 @@ product.stock > 0
 <button
   id="addToCartBtn"
   class="btn ${
-    product.stock > 0
-      ? "btn-success"
-      : "btn-secondary"
+    !isOnSaleToday
+        ? "btn-secondary"
+        : product.stock > 0
+            ? "btn-success"
+            : "btn-secondary"
   } btn-lg mt-3"
-  ${product.stock <= 0 ? "disabled" : ""}
+  ${(!isOnSaleToday || product.stock <= 0) ? "disabled" : ""}
 >
   ${
-    product.stock > 0
-      ? "Thêm vào giỏ hàng"
-      : "Hết hàng"
+    !isOnSaleToday
+        ? "CHƯA BÁN"
+        : product.stock > 0
+            ? "Thêm vào giỏ hàng"
+            : "Hết hàng"
   }
 </button>
 
@@ -127,7 +145,7 @@ product.stock > 0
 `;
 
     // CHỜ DOM RENDER XONG
-    if(product.stock > 0){
+    if (product.stock > 0 && isOnSaleToday){
 
   document
     .getElementById("addToCartBtn")
