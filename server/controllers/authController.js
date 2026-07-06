@@ -11,18 +11,14 @@ const register = async (req, res) => {
   phone = phone?.trim();
   password = password?.trim();
 
-  // ======================
   // KIỂM TRA DỮ LIỆU RỖNG
-  // ======================
   if (!full_name || !email || !phone || !password) {
     return res.status(400).json({
       message: "Vui lòng nhập đầy đủ thông tin"
     });
   }
 
-  // ======================
   // VALIDATE EMAIL
-  // ======================
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!emailRegex.test(email)) {
@@ -31,9 +27,7 @@ const register = async (req, res) => {
     });
   }
 
-  // ======================
   // VALIDATE PHONE
-  // ======================
   const phoneRegex = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
 
   if (!phoneRegex.test(phone)) {
@@ -42,18 +36,15 @@ const register = async (req, res) => {
     });
   }
 
-  // ======================
+
   // VALIDATE PASSWORD
-  // ======================
   if (password.length < 8) {
     return res.status(400).json({
       message: "Mật khẩu phải có ít nhất 8 ký tự"
     });
   }
 
-  // ======================
   // KIỂM TRA EMAIL TỒN TẠI
-  // ======================
   try {
 
   const [results] = await db.query(
