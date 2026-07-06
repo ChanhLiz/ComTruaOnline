@@ -3,9 +3,8 @@ const router = express.Router();
 const db = require("../config/db");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// ======================
+
 // GET CART
-// ======================
 router.get("/", authMiddleware, (req, res) => {
   const userId = req.user.id;
 
@@ -23,9 +22,8 @@ router.get("/", authMiddleware, (req, res) => {
   });
 });
 
-// ======================
+
 // ADD TO CART
-// ======================
 router.post("/add", authMiddleware, (req, res) => {
   const userId = req.user.id;
   const { product_id, quantity } = req.body;
@@ -68,9 +66,8 @@ router.post("/add", authMiddleware, (req, res) => {
   });
 });
 
-// ======================
+
 // UPDATE
-// ======================
 router.put("/update", authMiddleware, (req, res) => {
   const userId = req.user.id;
   const { product_id, quantity } = req.body;
@@ -88,9 +85,8 @@ router.put("/update", authMiddleware, (req, res) => {
   });
 });
 
-// ======================
+
 // DELETE
-// ======================
 router.delete("/remove/:productId", authMiddleware, (req, res) => {
   const userId = req.user.id;
   const productId = req.params.productId;
